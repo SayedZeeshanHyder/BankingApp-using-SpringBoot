@@ -34,10 +34,12 @@ public class AccountServices {
     public void addTransactionsToUsers(TransactionModel transaction){
         AccountModel senderAccount = getAccountById(transaction.getSender());
         senderAccount.getTransactions().add(transaction);
+        senderAccount.setBalance(senderAccount.getBalance() - transaction.getAmount());
         accountRepository.save(senderAccount);
 
         AccountModel recieverAccount = getAccountById(transaction.getReciever());
         recieverAccount.getTransactions().add(transaction);
+        recieverAccount.setBalance(recieverAccount.getBalance() + transaction.getAmount());
         accountRepository.save(recieverAccount);
     }
 

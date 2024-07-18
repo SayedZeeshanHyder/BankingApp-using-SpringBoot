@@ -17,9 +17,12 @@ public class TransactionServices {
     private AccountServices accountServices;
 
     public TransactionModel createTransaction(TransactionModel newTransaction){
-        newTransaction.setTransactionTime(LocalDateTime.now());
-        accountServices.addTransactionsToUsers(newTransaction);
-        return transactionRepository.save(newTransaction);
+        if(accountServices.getAccountById(newTransaction.getSender()).getBalance() >= newTransaction.getAmount()) {
+            newTransaction.setTransactionTime(LocalDateTime.now());
+            accountServices.addTransactionsToUsers(newTransaction);
+            return transactionRepository.save(newTransaction);
+        }
+        return null;
     }
 
 }
