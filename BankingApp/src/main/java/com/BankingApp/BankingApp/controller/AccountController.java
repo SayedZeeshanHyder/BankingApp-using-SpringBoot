@@ -1,5 +1,4 @@
 package com.BankingApp.BankingApp.controller;
-
 import com.BankingApp.BankingApp.model.AccountModel;
 import com.BankingApp.BankingApp.services.AccountServices;
 import org.bson.types.ObjectId;
@@ -38,6 +37,24 @@ public class AccountController {
     public ResponseEntity<String> deleteUserById(@PathVariable ObjectId id){
         accountServices.deleteAccountById(id);
         return new ResponseEntity<>("User Deleted Successfully",HttpStatus.GONE);
+    }
+
+    @PostMapping("/withdraw/{id}")
+    public ResponseEntity<String> withdraw(@PathVariable ObjectId id,@RequestBody Double amount){
+        AccountModel withdrawReturn = accountServices.withdrawAmount(id,amount);
+        if(withdrawReturn != null) {
+            return new ResponseEntity<>(amount + " Successfully Withdrawn",HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Insufficient Balance",HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @PostMapping("/withdraw/{id}")
+    public ResponseEntity<String> deposit(@PathVariable ObjectId id,@RequestBody Double amount){
+        AccountModel withdrawReturn = accountServices.depositAmount(id,amount);
+        if(withdrawReturn != null) {
+            return new ResponseEntity<>(amount + " Successfully Deposited",HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Insufficient Balance",HttpStatus.NOT_ACCEPTABLE);
     }
 
 }
